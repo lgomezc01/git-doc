@@ -1,0 +1,244 @@
+#Git stores configuration options in three separate files, which lets you scope options to individual repositories (local), user (Global), or the entire system (system):
+#	Local: /.git/config – Repository-specific settings.
+#	Global: /.gitconfig – User-specific settings. This is where options set with the --global flag are stored.
+#	System: $(prefix)/etc/gitconfig – System-wide settings.
+git config --global --list
+#Configuracion local del projecto
+git config -l
+
+#Editmaos las opciones globales
+#git config --system core.editor <editor>
+git config --global core.editor vim
+#Define the text editor used by commands like git commit for all users on the current machine. The < editor > argument should be the command that launches the desired editor (e.g., vi). This example introduces the --system option. The --system option will set the configuration for the entire system, meaning all users and repos on a machine. For more detailed information on configuration levels visit the git config page.
+git config --global --edit
+git config --global -e
+
+#Create a shortcut for a Git command. This is a powerful utility to create custom shortcuts for commonly used git commands. A simplistic example would be:
+#	git config --global alias.<alias-name> <git-command>
+	git config --global alias.ci commit
+#This creates a ci command that you can execute as a shortcut to git commit. To learn more about git aliases visit the git config page.
+
+git config --global user.email "lgomezc@adquira-es.com"  
+git config --global user.name "Luis Gomez"
+git clone https://poseidon.adquira-es.com/scm/dck/docker.git
+git status
+git fetch
+git pull origin
+git diff Weblogic/14.1.1.0/Checksum.developer 
+#Si queremos añadir una carpeta
+git add git-server/** 
+#git commit -a
+git commit -m "Subismo unos cambios"
+git add hello.py
+git commit --amend
+#This will once again, open up the configured text editor. This time, however, it will be pre-filled with the commit message we previously entered. This indicates that we are not creating a new commit (adding new file: hello.py), but editing the last.
+git log
+
+#Para borrar contenido
+git rm -r git-server/**
+git restore git-server/**  
+git rm -r git-server/volume/**
+git commit -m "Eliminamos contenido que no se necesita en git"
+
+git push origin
+git restore . 
+git add .
+
+################ CREAR REPO DESDE CERO ################
+#Accedemos al contenedor via ssh con el usuario administrador de git: "git_admin":
+ssh git_admin@127.0.0.1
+#Iniciar un proyecto de cero: git-server. Vamos al directorio que esta mepado en el host (directorio git) e inicializamos un proyecto con git, por ejemplo: "git-server"
+cd /srv/git
+#https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-init
+#Both git init and git clone accept a --bare argument. The most common use case for bare repo is to create a remote central Git repository
+git init --bare git-server.git
+
+#En la maquina local, nos creamos nuestros workspace
+mkdir workspace
+cd workspace
+git clone lgomezc@127.0.0.1:/srv/git/git-server.git
+git remote get-url origin
+#Creamos contenido
+touch newFile
+git status
+git add newFile
+git commit -m "Subimos archivo"
+git config user.email "lgomezc@adquira-es.com"  
+git config user.name "lgomezc"
+git pull
+
+
+################ CREAR REPO A PARTIR DE CARPETA ################
+#SERVER
+#Hasta ahora tenemos un repositorio en local. Tenemos que asociarlo a uno remoto.
+cd /srv/git
+git init --bare git-server.git
+
+#CLIENTE
+cd git-server
+git init
+git add --all
+git commit -m "carga inicial"
+git remote show 
+git remote add origin lgomezc@127.0.0.1:/srv/git/git-server.git 
+#git remote remove origin
+git remote show
+git remote get-url origin
+git branch
+#Once you have a remote repo setup, you will need to add a remote repo url to your local git config, and set an upstream branch for your local branches. The git remote command offers such utility.
+	#git remote add <remote_name> <remote_repo_url>
+#This command will map remote repository at  to a ref in your local repo under . Once you have mapped the remote repo you can push local branches to it.
+	#git push -u <remote_name> <local_branch_name>
+#This command will push the local repo branch under < local_branch_name > to the remote repo at < remote_name >
+#Algo así como asocia la rama local master a la url que tiene asociado el repositorio remoto: origin
+git push -u origin master
+gir log 
+git show-branch --all
+#Listamos las ramas remotas
+git show-branch --list -r 
+git branch --list --remote 
+git branch --list
+
+git show-branch origin/master develop 
+! [origin/master] delete test.txt
+ * [develop] actualizamos gitignore
+--
+ * [develop] actualizamos gitignore
+ * [develop^] Borramos ficheros tmp
+ * [develop~2] comentarios de como descargar utilizar la imagen
+ * [develop~3] comentarios de como descargar utilizar la imagen
+ * [develop~4] subimos scritp para hacer push al respositorio docker de este contendor
+ * [develop~5] Subimos el contendor de Nexus que se ha utilizado para probar repositorio de Docker
+ * [develop~6] Eliminamos contenido que no se necesita en git
+ * [develop~7] Cambios diversos
+ * [develop~8^2] Subida de dos contenedores de ejemplo: ssh-server y git-server
+ * [develop~9] Añadido fichero de configuarción weblogic con parametros de memoria y arranque
+ * [develop~10] Movido a directorio especifico para weblogic
+ * [develop~11] Initial commit
++* [origin/master] delete test.txt
+
+#-g = --reflog
+git show-branch --reflog="2,2 hour ago" develop 
+
+
+mkdir borrar
+cd borrar
+#Ahora nos bajamos el proyecto en esta carpeta para comprobar que hemos subido correctamente el contenido.
+git clone lgomezc@127.0.0.1:/srv/git/git-server.git
+
+
+################ CREAR REPO A PARTIR DE CARPETA Y HACER PUSH EN GITHUB ################
+
+#…or create a new repository on the command line
+echo "# web_components" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/lgomezc01/web_components.git
+git push -u origin main
+
+#…or push an existing repository from the command line
+git remote add origin https://github.com/lgomezc01/web_components.git
+git branch -M main
+git push -u origin main
+
+
+
+#COMANDOS
+git ls-files -s
+git ls-files -c
+git ls-files -o
+git ls-files -m
+
+
+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
+
+
+################ GIT CLONE ################
+
+
+git clone -branch
+The -branch argument lets you specify a specific branch to clone instead of the branch the remote HEAD is pointing to, usually the main branch. In addition you can pass a tag instead of branch for the same effect.
+git clone --branch
+
+Cloning a specific tag
+git clone --branch <tag> <repo>
+Clone the repository located at <repo> and only clone the ref for <tag>
+
+git clone --bare
+Similar to git init --bare, when the -bare argument is passed to git clone, a copy of the remote repository will be made with an omitted working directory. This means that a repository will be set up with the history of the project that can be pushed and pulled from, but cannot be edited directly. In addition, no remote branches for the repo will be configured with the -bare repository. Like git init --bare, this is used to create a hosted repository that developers will not edit directly.
+
+
+
+################ GIT LOG ################
+
+git log
+git log -n <limit>
+git log --oneline
+git log --stat
+git log -p
+git log --author="<pattern>"
+git log --grep="<pattern>"
+git log <since>..<until>
+git log <file>
+git log --graph --decorate --oneline
+git log --graph --oneline --stat
+git log --author="John Smith" -p hello.py
+git log --oneline main..some-feature
+git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
+git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat -p
+git config alias.tree 'log --pretty=format:"[%h: %an]: %s (%ai)" --stat' 
+#Para evitar el arbol y ver los commit en orden hay q quitar --graph
+git config alias.trace 'log --pretty=format:"[%h: %an]: %s (%ai)" --stat' 
+git log --pretty=format:"[%h: %an]: %s (%ai)" --stat
+
+
+################ GIT TAG ################
+
+#apunta HEAD
+git tag v2.0 -m "CURRENT" 
+git tag -a v1.0 -m "my version v1-0" 22e0a5b 
+git tag v1.1 -m "my second" f06b98c 
+git tag --list 
+git tag -l v* 
+git push origin v1.1
+git push origin --tags v1.0 v2.0
+#detach HEAD 
+git checkout v1.1
+#Volvemos a la rama anteior
+git switch - 
+#Vamos a crear una rama a paritr del tag. Primera hacemos checout (para traernos el contenido)
+git checkout v1.1
+echo "other file" > other.txt
+git switch -c branch1.1
+git branch
+	* branch1.1
+	master
+git add . 
+git commit -m "nuevo file"
+git diff -p master branch1.1  
+#displays a brief overview of all the commits that are in branch1.1 that are not in main.
+git log master..branch1.1 
+	commit 9e8f41883b7e3234a75dc5277b10e685bfcc97cc
+	Author: Luis Gomez <lgomezc@adquira-es.com>
+	Date:   Sun Mar 5 23:45:28 2023 +0100
+	
+	    nuevo file
+git tag -d v2.0 
+
+
+
+################ GIT DIFF ################
+
+#How to compare files from two different branches
+git diff mybranch master -- myfile.css
+#El comando de arriba es equivalene a (se le pasa la ruta relativa): 
+git diff mybranch..master -- myfile.css
+git diff ..master path/to/file
+
+
+git diff A...B
+#You may also be interested in mybranch...master (from git diff documentation):
+#This form is to view the changes on the branch containing and up to the second <commit>, starting at a common ancestor of both <commit>. git diff A...B is equivalent to git diff $(git-merge-base A B) B.
+#In other words, this will give a diff of changes in master since it diverged from mybranch (but without new changes since then in mybranch).

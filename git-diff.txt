@@ -1,0 +1,101 @@
+git diff: Show changes between the working tree and the index or a tree, changes between the index and a tree, changes between two trees, changes between two blob objects, or changes between two files on                  disk. 
+
+### The working directory ###
+The first tree we will examine is "The Working Directory". This tree is in sync with the local filesystem and is representative of the immediate changes made to content in files and directories.
+
+### Staging index ###
+Next up is the 'Staging Index' tree. This tree is tracking Working Directory changes, that have been promoted with git add, to be stored in the next commit. This tree is a complex internal caching mechanism. Git generally tries to hide the implementation details of the Staging Index from the user.
+
+To accurately view the state of the Staging Index we must utilize a lesser known Git command git ls-files. The git ls-files command is essentially a debug utility for inspecting the state of the Staging Index tree.
+
+git ls-files -s
+100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0   reset_lifecycle_file
+
+Here we have executed git ls-files with the -s or --stage option. Without the -s option the git ls-files output is simply a list of file names and paths that are currently part of the index. The -s option displays additional metadata for the files in the Staging Index. This metadata is the staged contents' mode bits, object name, and stage number. Here we are interested in the object name, the second value (d7d77c1b04b5edd5acfc85de0b592449e5303770). This is a standard Git object SHA-1 hash. It is a hash of the content of the files. The Commit History stores its own object SHA's for identifying pointers to commits and refs and the Staging Index has its own object SHA's for tracking versions of files in the index.
+
+### Commit history ###
+
+The final tree is the Commit History. The git commit command adds changes to a permanent snapshot that lives in the Commit History. This snapshot also includes the state of the Staging Index at the time of commit.
+
+mkdir borrar
+cd borrar
+git init . 
+echo "hola amigos" > aaa.txt
+#En este punto el archivo en: working directory
+git add aaa.txt
+#Añadimos a: Staging index.
+git diff aaa.txt  #son iguales
+#Hamoces una modificacion en la versión que se encuentra en working directory
+echo "adios amigos" > aaa.txt
+#comparamos entre working direcotry y staging index
+git diff aaa.txt #son diferentes
+git status 
+
+		On branch master
+		
+		No commits yet
+		
+		Changes to be committed:
+		  (use "git rm --cached <file>..." to unstage)
+			new file:   aaa.txt
+		
+		Changes not staged for commit:
+		  (use "git add <file>..." to update what will be committed)
+		  (use "git restore <file>..." to discard changes in working directory)
+			modified:   aaa.txt
+		
+#Añadirmos a tree (commit history):
+git commit -m inicio
+#comparamos entre staging index y tree
+git diff --staged aaa.txt #son iguales
+git diff --cached aaa.txt #mismo comando que el anterior; son iguales
+git add aaa.txt
+git diff --staged aaa.txt #Ahora son diferentes en la comparacion entre staging index y tree:
+git diff --staged aaa.txt #Ahora son iguales en la comparacion entre working directory staging index
+
+#Comparing all changes: By default git diff will show you any uncommitted changes since the last commit.
+git diff
+
+#Comparing files between two different commits
+git diff can be passed Git refs to commits to diff. Some example refs are, HEAD, tags, and branch names. Every commit in Git has a commit ID which you can get when you execute GIT LOG
+git log --pretty=oneline
+git diff 121311 45654656
+
+#Comparing branches
+git diff develop master
+git diff origin/AOL-2 origin/AOL-3 
+
+#Comparing files from two branches
+git diff origin/AOL-2 origin/AOL-3 ./onboarding-api-client/src/main/java/com/adquira/clients/onboarding/client/ContractClient.java 
+git diff origin/AOL-2 origin/AOL-3 *ContractClient.java 
+
+
+############################ EJEMPLO CONFIGURACION GIT DIFF PARA COMPARA CONTENIDO DE ZIPs ############################
+#Configuramos git para que podamos comparar el contenido dentro de los archivos zip en lugar de hacer la comparacion en binario.
+rm -rf borrar
+mkdir borrar
+cd borrar
+echo "hola amigos" > aaa.txt
+echo "hola amigos111" > bbb.txt
+echo "hola amigos222" > ccc.txt
+echo "hola amigos333" > ddd.txt
+zip original.zip * 
+git init . 
+#En este punto tenemos los 4 solamente en: working directory
+git add --all
+#En este añadimos los archivos a: Staging index
+git commit -m "carga inicial"
+#En este añadimos los archivos a: Commit history
+
+echo "adios amigos111" > bbb.txt
+echo "adios amigos222" > ccc.txt
+zip original * -x *.zip
+echo "*.zip diff=zipconv" >> .gitattributes
+git config --list 
+
+git config -e
+[diff "zipconv"]
+	#textconv=unzip -c
+	textconv=unzip -l
+	
+git diff original.zip
