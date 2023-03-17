@@ -227,8 +227,10 @@ git log master..branch1.1
 	
 	    nuevo file
 git tag -d v2.0 
-
-
+#Para borrar en remoto
+git push origin :refs/tags/v2.0 
+#otra forma
+git push --delete origin v2.0 
 
 ################ GIT DIFF ################
 
@@ -243,3 +245,20 @@ git diff A...B
 #You may also be interested in mybranch...master (from git diff documentation):
 #This form is to view the changes on the branch containing and up to the second <commit>, starting at a common ancestor of both <commit>. git diff A...B is equivalent to git diff $(git-merge-base A B) B.
 #In other words, this will give a diff of changes in master since it diverged from mybranch (but without new changes since then in mybranch).
+
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+git diff --name-only  remotes/origin/release/release..release/5.39.0.0
+git diff --name-status remotes/origin/release/release..release/5.39.0.0
+git diff --numstat remotes/origin/release/release..release/5.39.0.0
+
+
+################ GIT LOG ################
+
+git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
+git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat -p
+git config alias.trace 'log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat' 
+
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+git log --name-only  remotes/origin/release/release..release/5.39.0.0
+git log --name-status remotes/origin/release/release..release/5.39.0.0
+git log --numstat remotes/origin/release/release..release/5.39.0.0

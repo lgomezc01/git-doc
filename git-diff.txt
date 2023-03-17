@@ -99,3 +99,8 @@ git config -e
 	textconv=unzip -l
 	
 git diff original.zip
+
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+git diff --name-only  remotes/origin/release/release..release/5.39.0.0
+git diff --name-status remotes/origin/release/release..release/5.39.0.0
+git diff --numstat remotes/origin/release/release..release/5.39.0.0

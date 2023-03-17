@@ -67,3 +67,8 @@ Try this interactive
 git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
 git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat -p
 git config alias.trace 'log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat' 
+
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+git log --name-only  remotes/origin/release/release..release/5.39.0.0
+git log --name-status remotes/origin/release/release..release/5.39.0.0
+git log --numstat remotes/origin/release/release..release/5.39.0.0
