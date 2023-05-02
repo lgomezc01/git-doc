@@ -48,7 +48,7 @@ git add .
 ################ CREAR REPO DESDE CERO ################
 #Accedemos al contenedor via ssh con el usuario administrador de git: "git_admin":
 ssh git_admin@127.0.0.1
-#Iniciar un proyecto de cero: git-server. Vamos al directorio que esta mepado en el host (directorio git) e inicializamos un proyecto con git, por ejemplo: "git-server"
+#Iniciar un proyecto de cero: git-server. Vamos al directorio que esta mapeado en el host (directorio git) e inicializamos un proyecto con git, por ejemplo: "git-server"
 cd /srv/git
 #https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-init
 #Both git init and git clone accept a --bare argument. The most common use case for bare repo is to create a remote central Git repository
@@ -262,3 +262,47 @@ git config alias.trace 'log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
 git log --name-only  remotes/origin/release/release..release/5.39.0.0
 git log --name-status remotes/origin/release/release..release/5.39.0.0
 git log --numstat remotes/origin/release/release..release/5.39.0.0
+
+git switch -c master2 --track flaca/master
+git checkout -b master2 --track origin/master
+
+
+################ GIT LOG ################
+git fetch 
+#There is any conflict so need to be resolved
+git merge 
+#It is open vscode and you can use it in order to resolve the conflicts
+git mergetool
+#git merge --continue
+#git merge --abort
+git add ficheromergeados
+git commit -m "Merge realizado"
+git push
+
+
+################ GIT CREDENTIAL HELP ################
+#On Ubuntu. Crea un fichero en  ~/.git-credentials (User-specific credentials file). $XDG_CONFIG_HOME/git/credentials
+git config --global credential.helper store
+
+#On WSL
+#If GIT installed is >= v2.39.0
+git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"
+#else if GIT installed is >= v2.36.1
+git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
+#else if version is < v2.36.1 enter this command:
+git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+
+#On wsl your system could be (/etc/gitconfig; autocrlf = true is important): 
+#sudo git config --system --edit
+[http]
+	#sslCAInfo = C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+	#sslBackend = openssl
+[diff "astextplain"]
+	textconv = astextplain
+[core]
+	autocrlf = true
+	fscache = true
+	symlinks = false
+[credential]
+	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe
+

@@ -72,3 +72,4 @@ git config alias.trace 'log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
 git log --name-only  remotes/origin/release/release..release/5.39.0.0
 git log --name-status remotes/origin/release/release..release/5.39.0.0
 git log --numstat remotes/origin/release/release..release/5.39.0.0
+git log --grep="MKP-2028"
