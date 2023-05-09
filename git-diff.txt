@@ -104,3 +104,9 @@ git diff original.zip
 git diff --name-only  remotes/origin/release/release..release/5.39.0.0
 git diff --name-status remotes/origin/release/release..release/5.39.0.0
 git diff --numstat remotes/origin/release/release..release/5.39.0.0
+
+#Compara un commit con el comit anterior:
+git diff 2e72e2fa4c5f2e1c78cafc1f086bb957f71950df^ 2e72e2fa4c5f2e1c78cafc1f086bb957f71950df
+
+#Comparamos la clase DTEInvoiceService.java con un comit y dos anteriores a este comit
+git diff 2e72e2fa4c5f2e1c78cafc1f086bb957f71950df~2  2e72e2fa4c5f2e1c78cafc1f086bb957f71950df *DTEInvoiceService.java
