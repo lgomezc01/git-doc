@@ -73,3 +73,28 @@ git log --name-only  remotes/origin/release/release..release/5.39.0.0
 git log --name-status remotes/origin/release/release..release/5.39.0.0
 git log --numstat remotes/origin/release/release..release/5.39.0.0
 git log --grep="MKP-2028"
+
+#Cambios realizados desde el penultimo commit y el último (HEAD)
+git log --stat HEAD^..HEAD
+
+#Cambios realizados dos cmmit atras desde el último (HEAD)
+git log --stat HEAD~2..HEAD
+
+#Buscamos cambios (tanto lineas añadidas como elimiadas que contengan la palabra: "adjudication"). La busqueda la realizamos en los ultimos 60 commits. 
+-G se le puede pasar una regex
+git log --stat  -G"adjudication" HEAD~60..HEAD
+
+-G<regex>
+	Look for differences whose patch text contains added/removed lines that match <regex>.
+	
+	To illustrate the difference between -S<regex> --pickaxe-regex and -G<regex>, consider a commit with the following diff in the same file:
+	
+	+    return !regexec(regexp, two->ptr, 1, &regmatch, 0);
+	...
+	-    hit = !regexec(regexp, mf2.ptr, 1, &regmatch, 0);
+	While git log -G"regexec\(regexp" will show this commit, git log -S"regexec\(regexp" --pickaxe-regex will not (because the number of occurrences of that string did not change).
+	
+	Unless --text is supplied patches of binary files without a textconv filter will be ignored.
+
+#Commit que cambian un archivo:
+git log --name-status servicesmng-api-client/src/main/java/com/adquira/clients/servicesmng/ServicesMngClientBootstrap.java

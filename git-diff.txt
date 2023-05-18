@@ -110,3 +110,23 @@ git diff 2e72e2fa4c5f2e1c78cafc1f086bb957f71950df^ 2e72e2fa4c5f2e1c78cafc1f086bb
 
 #Comparamos la clase DTEInvoiceService.java con un comit y dos anteriores a este comit
 git diff 2e72e2fa4c5f2e1c78cafc1f086bb957f71950df~2  2e72e2fa4c5f2e1c78cafc1f086bb957f71950df *DTEInvoiceService.java
+
+#
+git config --list --global
+http.sslverify=false
+user.name=lgomezc
+user.email=lgomezc@adquira-es.com
+core.editor=code --wait
+diff.tool=vscode
+difftool.vscode.cmd=code --wait --diff $LOCAL $REMOTE              ****************
+merge.tool=vscode
+mergetool.vscode.cmd=code --wait $MERGED
+credential.helper=wincred
+alias.trace=log --pretty=format:"[%h: %an]: %s (%ai)" --stat
+alias.tree=log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
+
+#Utilizamos visual code para comparar un archivo en dos commits diferentes
+git difftool HEAD^..HEAD tmux/.tmuxp/ansible-lxc.yaml
+
+#Solo listamos los archivos que han sido modificados
+git log --stat --name-status --diff-filter=M HEAD^..HEAD 
