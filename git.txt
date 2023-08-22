@@ -53,6 +53,7 @@ cd /srv/git
 #https://www.atlassian.com/git/tutorials/setting-up-a-repository/git-init
 #Both git init and git clone accept a --bare argument. The most common use case for bare repo is to create a remote central Git repository
 git init --bare git-server.git
+git clone --bare --progress -v https://lgomezc1@bitbucket.org/adquira/marketplace.git mkp.git
 
 #En la maquina local, nos creamos nuestros workspace
 mkdir workspace
@@ -86,6 +87,8 @@ git remote add origin lgomezc@127.0.0.1:/srv/git/git-server.git
 git remote show
 git remote get-url origin
 git branch
+#Te dice a que esta mapeado cada rama en local con su correspondiente remota
+git branch -vv
 #Once you have a remote repo setup, you will need to add a remote repo url to your local git config, and set an upstream branch for your local branches. The git remote command offers such utility.
 	#git remote add <remote_name> <remote_repo_url>
 #This command will map remote repository at  to a ref in your local repo under . Once you have mapped the remote repo you can push local branches to it.
@@ -159,7 +162,7 @@ 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
 ################ GIT CLONE ################
 
 
-git clone -branch
+git clone --branch
 The -branch argument lets you specify a specific branch to clone instead of the branch the remote HEAD is pointing to, usually the main branch. In addition you can pass a tag instead of branch for the same effect.
 git clone --branch
 
@@ -234,7 +237,7 @@ git tag -d v2.0
 #Para borrar en remoto
 git push origin :refs/tags/v2.0 
 #otra forma
-git push --delete origin v2.0 
+git push origin --delete v2.0 
 
 ################ GIT DIFF ################
 
@@ -310,3 +313,91 @@ git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec
 [credential]
 	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe
 
+
+
+################ List All Branches ################
+NOTE: The current local branch will be marked with an asterisk (*).
+
+To see local branches, run this command:
+git branch
+
+To see remote branches, run this command:
+git branch -r
+
+To see all local and remote branches, run this command:
+git branch -a
+
+
+################ Create a New Branch ################
+Run this command (replacing my-branch-name with whatever name you want):
+git checkout -b my-branch-name
+
+You're now ready to commit to this branch.
+
+
+################ Switch to a Branch In Your Local Repo ################
+Run this command:
+git checkout my-branch-name
+
+
+################ Switch to a Branch That Came From a Remote Repo ################
+To get a list of all branches from the remote, run this command:
+git pull
+
+Run this command to switch to the branch:
+git checkout --track origin/my-branch-name
+
+################ Push to a Branch ################
+If your local branch does not exist on the remote, run either of these commands:
+git push -u origin my-branch-name
+git push -u origin HEAD
+NOTE: HEAD is a reference to the top of the current branch, so it's an easy way to push to a branch of the same name on the remote. This saves you from having to type out the exact name of the branch!
+
+If your local branch already exists on the remote, run this command:
+git push
+
+################ Merge a Branch ################
+
+You'll want to make sure your working tree is clean and see what branch you're on. Run this command:
+git status
+
+First, you must check out the branch that you want to merge another branch into (changes will be merged into this branch). If you're not already on the desired branch, run this command:
+git checkout master
+
+NOTE: Replace master with another branch name as needed.
+
+Now you can merge another branch into the current branch. Run this command:
+git merge my-branch-name
+
+NOTE: When you merge, there may be a conflict. Refer to Handling Merge Conflicts (the next exercise) to learn what to do.
+
+################ Delete Branches ################
+To delete a remote branch, run this command:
+git push origin --delete my-branch-name
+
+To delete a local branch, run either of these commands:
+git branch -d my-branch-name
+git branch -D my-branch-name
+
+NOTE: The -d option only deletes the branch if it has already been merged. The -D option is a shortcut for --delete --force, which deletes the branch irrespective of its merged status
+
+
+################ Renaming Git Branch ################
+
+Follow the steps below to rename a Local and Remote Git Branch:
+
+1.- Start by switching to the local branch which you want to rename:
+git checkout <old_name>
+
+2.- Rename the local branch by typing:
+git branch -m <new_name>
+
+At this point, you have renamed the local branch.
+
+If you’ve already pushed the <old_name> branch to the remote repository , perform the next steps to rename the remote branch.
+
+3.- Push the <new_name> local branch and reset the upstream branch:
+git push origin -u <new_name>
+
+4.- Delete the <old_name> remote branch:
+git push origin --delete <old_name>

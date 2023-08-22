@@ -1,0 +1,11 @@
+#"^master" significa excluir el commit donde apunta la rama masger y todos los parents
+git log master..develop === git log develop ^master
+
+#Para mostrar los commit parents en cado de que tenga varios (por ejemplo, cuando se hace merge) utilizar el parametro "--parents":
+git log --parents
+
+#Es una operación simetrica. muestra los cambios que hacen que las dos ramas sean diferentes. Por ello, se trata de una operación simétrica
+git log master...develop === git log develop...master === (git log master..develop + git log develop..master)
+
+#Muestra historico de los commit de manera gráfica y on orden en que se han creado los commit (diferente a la opción por defecto: --topo-order)
+git log --graph --date-order 

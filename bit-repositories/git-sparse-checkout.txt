@@ -1,0 +1,125 @@
+https://github.blog/2020-01-17-bring-your-monorepo-down-to-size-with-sparse-checkout/
+
+#Hay que actualira git a version superior a 2.25.1 --> 2.42 (esta es la version despues de actualizar)
+add-apt-repository ppa:git-core/ppa 
+apt update && apt upgrade -y 
+
+################ Using sparse-checkout with an existing repository ################
+
+To restrict your working directory to a set of directories, run the following commands:
+
+git sparse-checkout init --cone
+git sparse-checkout set <dir1> <dir2> ...
+
+If you get stuck, run git sparse-checkout disable to return to a full working directory.
+
+The init subcommand sets the necessary Git config options and fills the sparse-checkout file with patterns that mean “only match files in the root directory”.
+
+The set subcommand modifies the sparse-checkout file with patterns to match the files in the given directories. Further, any files that are immediately in a directory that’s a parent to a specified directory are also included. For example, if you ran git sparse-checkout set A/B, then Git would include files with names A/B/C.txt (immediate child of A/B) and A/D.txt (immediate sibling of A/B) as well as E.txt (immediate sibling of A).
+
+
+################ Cloning in sparse mode ################
+
+The examples I’ve provided started with a repository that already had every tracked file filled in the working directory. This is how you’d start using the sparse-checkout feature with your existing repositories. However, if you’re cloning a new repository, you can avoid filling the working directory with the huge list of files by using the --no-checkout option as you clone.
+
+#Vamos a utlizar como ejemplo el repositorio docker de Adquira que tien un monton de carpetas y alguno con blob y archivos con mucho peso
+#Parece que bitbucket no soporta por el momento "partial clone": https://about.gitlab.com/blog/2020/03/13/partial-clone-for-massive-repositories/
+git clone --no-checkout --filter=blob:none --sparse https://lgomezc1@bitbucket.org/adquira/docker.git
+Cloning into 'docker'...
+warning: filtering not recognized by server, ignoring
+warning: filtering not recognized by server, ignoring
+Receiving objects: 100% (570/570), 1.92 GiB | 10.10 MiB/s, done.                                                                                                                                                     Resolving deltas: 100% (172/172), done. 
+
+cd docker
+git sparse-checkout init --cone
+#Ver más adelante
+cat .git/info/sparse-checkout
+git checkout develop
+
+#Solo se trae los archivos de la carpeta raiz
+ls
+drwxrwxrwx 1 lgomezc lgomezc 4096 Aug 22 23:33 .git
+-rwxrwxrwx 1 lgomezc lgomezc  242 Aug 22 23:33 .gitignore
+
+cat .git/config
+[core]
+	repositoryformatversion = 1
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+[remote "origin"]
+	url = https://lgomezc1@bitbucket.org/adquira/docker.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	promisor = true
+	partialclonefilter = blob:none
+[extensions]
+	worktreeConfig = true
+[branch "develop"]
+	remote = origin
+	merge = refs/heads/develop
+
+cat .git/config.worktree
+[core]
+	sparseCheckout = true
+	sparseCheckoutCone = true
+
+
+#Vamos a establecer los pattern de lo que nos queremos traer al working directory (o lo que queremos excluir). El lenguaje es el mismo que el utilizando en .gitignore.
+#Sin embargo, en este caso el archivo de configuracion esta en: .git/info/sparse-checkout
+cat .git/info/sparse-checkout
+/*
+!/*/
+
+#Para consultar los directorio (de manera recursiva) que existen en el repositorio (la referencia es HEAD)
+git ls-tree -d -r --name-only HEAD 
+git sparse-checkout set docker-compose git-server nexus ssh-server swarm
+git sparse-checkout list
+	docker-compose
+	git-server
+	nexus
+	ssh-server
+	swarm
+
+
+cat .git/info/sparse-checkout
+/*
+!/*/
+/docker-compose/
+/git-server/
+/nexus/
+/ssh-server/
+/swarm/
+
+git sparse-checkout set --cone
+ls
+drwxrwxrwx 1 lgomezc lgomezc 4096 Aug 22 23:33 .git
+-rwxrwxrwx 1 lgomezc lgomezc  242 Aug 22 23:33 .gitignore
+
+cat .git/info/sparse-checkout
+/*
+!/*/
+
+#Repopulate the working directory with all files, disabling sparse checkouts.  
+git sparse-checkout disable
+
+
+#Otra manera de hacerlo. Es exluir lo que no quiere, pero es más complicado:
+#git sparse-checkout set --no-cone "/*" "!/folder/" "!/path/to/dist/*.map"
+
+#-H  Enable ! style history substitution.  This flag is on by default when the shell is interactive. 
+#You may need set +H for the command to get through (bash treats ! as a special command). And set -H afterwards to restore the default bash behaviour.
+set +H
+git sparse-checkout set --no-cone "/*" "!/Weblogic/" "!/CreacionEntorno/"
+set -H
+git sparse-checkout list
+	/*
+	!/Weblogic/
+	!/CreacionEntorno/
+
+git sparse-checkout set --cone
+git sparse-checkout set --cone docker-compose
+git sparse-checkout add git-server 
+git sparse-checkout list
+	docker-compose
+	git-server

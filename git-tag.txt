@@ -114,3 +114,6 @@ In this example git tag is executed to display a list of tags showing v1, v2, v3
 Summary
 To recap, Tagging is an additional mechanism used to create a snap shot of a Git repo. Tagging is traditionally used to create semantic version number identifier tags that correspond to software release cycles. The git tag command is the primary driver of tag: creation, modification and deletion. There are two types of tags; annotated and lightweight. Annotated tags are generally the better practices as they store additional valuable meta data about the tag. Additional Git commands covered in this document were git push, and git checkout. Visit their corresponding pages for discussion on their extended use.
 
+#Para listar los tag (anotados) junto con sus comentarios
+git tag -l -n9
+git tag -l -n

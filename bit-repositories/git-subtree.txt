@@ -1,0 +1,22 @@
+################ GIT-SUBTREE ################
+
+#Tenemos un repositorio ya existente: "home_repository" (tiene la carpeta .git)
+cd home_repository
+git remote add -f docker https://lgomezc1@bitbucket.org/adquira/docker.git
+git subtree add --prefix docker_folder docker master --squash
+
+git fetch docker master
+
+cd docker_folder
+touch file1.txt
+git add file1.txt
+git commit -m "añadismo file1.txt al subtree docker_folder" 
+#Con esto subimos al repositorio de "docker" pero el contenido también habría que subirlo al repositorio padre: origin
+git subtree push --prefix=docker_folder docker master
+
+#Para acutaliza cambios de otras personas
+git subtree pull --prefix docker_folder docker master --squash
+
+#Vamos a subir el contenido la repositorio padre:
+git log --graph --date-order
+git push

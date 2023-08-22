@@ -158,7 +158,8 @@ git stash list
 	stash@{2}: WIP on main: 5002d47 our new homepage
 
 To provide a bit more context, it's good practice to annotate your stashes with a description, using git stash save "message":
-
+              
+#La opcion "save" esta deprecada. Mejor usar: git stash push -m "add style to our site"
 git stash save "add style to our site"
 	Saved working directory and index state On main: add style to our site
 	HEAD is now at 5002d47 our new homepage
@@ -238,6 +239,12 @@ y	stash this hunk
 
 There is no explicit "abort" command, but hitting CTRL-C(SIGINT) will abort the stash process.
 
+#Solo guardamos los cambios de un archivo en concreto
+git stash push -p requirements.txt -m "Esto va de puta madre"
+git stash list 
+git stash show 
+#Para ver las diferencias
+git stash show -p
 
 ####### Creating a branch from your stash #######
 
@@ -265,3 +272,14 @@ Dropped stash@{1} (17e2697fd8251df6163117cb3d58c1f62a5e7cdb)
 Or you can delete all of your stashes with:
 
 $ git stash clear
+																									
+																									
+####### Recovering stash entries that were cleared/dropped erroneously #######																																																																																																																																																		
+
+If you mistakenly drop or clear stash entries, they cannot be recovered through the normal safety
+mechanisms. However, you can try the following incantation to get a list of stash entries that are still
+in your repository, but not reachable any more:
+
+   git fsck --unreachable |
+   grep commit | cut -d\  -f3 |
+   xargs git log --merges --no-walk --grep=WIP

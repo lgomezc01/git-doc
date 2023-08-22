@@ -73,6 +73,9 @@ git log --name-only  remotes/origin/release/release..release/5.39.0.0
 git log --name-status remotes/origin/release/release..release/5.39.0.0
 git log --numstat remotes/origin/release/release..release/5.39.0.0
 git log --grep="MKP-2028"
+git log --name-status *PasswordEncoderConfig*
+#Se busca en que commit se ha añadido la clase
+git log --name-status --diff-filter=A *Users.*
 
 #Cambios realizados desde el penultimo commit y el último (HEAD)
 git log --stat HEAD^..HEAD
@@ -98,3 +101,20 @@ git log --stat  -G"adjudication" HEAD~60..HEAD
 
 #Commit que cambian un archivo:
 git log --name-status servicesmng-api-client/src/main/java/com/adquira/clients/servicesmng/ServicesMngClientBootstrap.java
+
+
+
+git log --stat --since="2023-05-01" --until="2023-06-01" --author=mapenia1 origin/wip_auditSys
+git log --stat --graph --pretty=format:"[%h: %an]: %s (%ai)" --since="2023-05-01" --until="2023-06-01" --author=mapenia1 origin/wip_auditSys
+git log  --since="2023-05-01" --until="2023-06-01" --author=mapenia1 --pretty=format:"%s (%ai)" origin/wip_auditSys > issuesMayo.txt
+
+#Dos manera de sacar el listado de archivos que se han cambiado (esta bien para hacernos una idea de la cantidad de cambios realizados)
+#En lugar de --stat se le puede pasar --name-status
+git log --pretty="format:" --since="2023-05-01" --until="2023-06-01" --stat | sort | uniq
+git diff $(git log --date-order --reverse --since="2023-05-01" --until="2023-06-01" --format=%H | head -1).. --stat
+
+#Shows all commits that are in any of local branches but not in any of remote-tracking branches for origin (what you have that origin doesn’t). 
+git log --branches --not --remotes=origin
+
+#To search a file in all commits:
+git log --all  --remotes --reflog --author-date-order --follow -- sql/Implantacion/SQL_PRE/SQL/07.1.Script_GPT-2994.sql

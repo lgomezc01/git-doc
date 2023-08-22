@@ -1,0 +1,4 @@
+$ git ls-remote https://lgomezc1@bitbucket.org/adquira/docker.git
+2304dd6f3d0e61153322a08413edf87ae2a50dfd        HEAD
+2304dd6f3d0e61153322a08413edf87ae2a50dfd        refs/heads/develop
+c13b935851de37e6713d0aa5f42f9f40aad6be0b        refs/heads/master
