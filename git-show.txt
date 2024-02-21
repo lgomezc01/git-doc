@@ -1,0 +1,9 @@
+git ls-tree -l HEAD -- C:\Luis\Proyectos\linux\ansible\modules.txt
+git ls-files --stage -- "*ansibleCmds.txt" 
+git show --textconv :ansible/ansibleCmds.txt
+git show --textconv HEAD:ansible/modules.txt
+
+#Muestra el directorio raiz del repositorio
+git rev-parse --show-toplevel
+#Directorio git
+git rev-parse --git-dir

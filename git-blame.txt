@@ -58,7 +58,7 @@ $ git blame README.md
     548dabed (Juni Mukherjee 2018-03-01 19:55:15 +0000 13) Also, it is important to have a few of these commits to clearly reflect the who, the what and the when. This will help Kev get good screenshots when he runs the git blame on this README.
 This is a sample of the first 13 lines of the README.md file. To better understand this output lets break down a line. The following table displays the content of line 3 and the columns of the table indicate the column content.
 
-Id	Author	Timestamp	Line Number	Line Content
+Id	Author	Timestamp	Line Number	Line Content.
 89feb84d	Albert So	2018-03-01 00:54:03 +0000	3	This repository is an example of a project with multiple contributors making commits.
 If we review the blame output list, we can make some observations. There are three authors listed. In addition to the project's maintainer Kev Zettler, Albert So, and Juni Mukherjee are also listed. Authors are generally the most valuable part of git blame output. The timestamp column is also primarily helpful. What the change was is indicated by line content column.
 

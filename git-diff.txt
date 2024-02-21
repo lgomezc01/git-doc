@@ -130,3 +130,6 @@ git difftool HEAD^..HEAD tmux/.tmuxp/ansible-lxc.yaml
 
 #Solo listamos los archivos que han sido modificados
 git log --stat --name-status --diff-filter=M HEAD^..HEAD 
+
+#Solo listamos los archivos que tienen diferencias (sin mostrar las diferencias)
+git diff --stat --name-only  origin/master..develop
