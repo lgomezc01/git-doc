@@ -37,12 +37,12 @@ git log --graph --decorate --oneline
 A few useful options to consider. The --graph flag that will draw a text based graph of the commits on the left hand side of the commit messages. --decorate adds the names of branches or tags of the commits that are shown. --oneline shows the commit information on a single line making it easier to browse through commits at-a-glance.
 
 Discussion
-The git log command is Git's basic tool for exploring a repository’s history. It’s what you use when you need to find a specific version of a project or figure out what changes will be introduced by merging in a feature branch.
+The git log command is Git's basic tool for exploring a repositoryï¿½s history. Itï¿½s what you use when you need to find a specific version of a project or figure out what changes will be introduced by merging in a feature branch.
 
 commit 3157ee3718e180a9476bf2e5cab8e3f1e78a73b7
 Author: John Smith
 
-Most of this is pretty straightforward; however, the first line warrants some explanation. The 40-character string after commit is an SHA-1 checksum of the commit’s contents. This serves two purposes. First, it ensures the integrity of the commit—if it was ever corrupted, the commit would generate a different checksum. Second, it serves as a unique ID for the commit.
+Most of this is pretty straightforward; however, the first line warrants some explanation. The 40-character string after commit is an SHA-1 checksum of the commitï¿½s contents. This serves two purposes. First, it ensures the integrity of the commitï¿½if it was ever corrupted, the commit would generate a different checksum. Second, it serves as a unique ID for the commit.
 
 This ID can be used in commands like git log .. to refer to specific commits. For instance, git log 3157e..5ab91 will display everything between the commits with ID's 3157e and 5ab91. Aside from checksums, branch names (discussed in the Branch Module) and the HEAD keyword are other common methods for referring to individual commits. HEAD always refers to the current commit, be it a branch or a specific commit.
 
@@ -64,26 +64,27 @@ Ready to learn git status?
 Try this interactive 
 
 ####### OTHER EXAMPLEs ########
+git log --graph --oneline --decorate --format='[%h: %an]: %s (%ai)'
 git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
 git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat -p
 git config alias.trace 'log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat' 
 
-#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no estï¿½n en la rama remota: remotes/origin/release/release
 git log --name-only  remotes/origin/release/release..release/5.39.0.0
 git log --name-status remotes/origin/release/release..release/5.39.0.0
 git log --numstat remotes/origin/release/release..release/5.39.0.0
 git log --grep="MKP-2028"
 git log --name-status *PasswordEncoderConfig*
-#Se busca en que commit se ha añadido la clase
+#Se busca en que commit se ha aï¿½adido la clase
 git log --name-status --diff-filter=A *Users.*
 
-#Cambios realizados desde el penultimo commit y el último (HEAD)
+#Cambios realizados desde el penultimo commit y el ï¿½ltimo (HEAD)
 git log --stat HEAD^..HEAD
 
-#Cambios realizados dos cmmit atras desde el último (HEAD)
+#Cambios realizados dos cmmit atras desde el ï¿½ltimo (HEAD)
 git log --stat HEAD~2..HEAD
 
-#Buscamos cambios (tanto lineas añadidas como elimiadas que contengan la palabra: "adjudication"). La busqueda la realizamos en los ultimos 60 commits. 
+#Buscamos cambios (tanto lineas aï¿½adidas como elimiadas que contengan la palabra: "adjudication"). La busqueda la realizamos en los ultimos 60 commits. 
 -G se le puede pasar una regex
 git log --stat  -G"adjudication" HEAD~60..HEAD
 
@@ -113,7 +114,7 @@ git log  --since="2023-05-01" --until="2023-06-01" --author=mapenia1 --pretty=fo
 git log --pretty="format:" --since="2023-05-01" --until="2023-06-01" --stat | sort | uniq
 git diff $(git log --date-order --reverse --since="2023-05-01" --until="2023-06-01" --format=%H | head -1).. --stat
 
-#Shows all commits that are in any of local branches but not in any of remote-tracking branches for origin (what you have that origin doesn’t). 
+#Shows all commits that are in any of local branches but not in any of remote-tracking branches for origin (what you have that origin doesnï¿½t). 
 git log --branches --not --remotes=origin
 
 #To search a file in all commits:
