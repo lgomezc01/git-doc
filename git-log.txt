@@ -119,3 +119,25 @@ git log --branches --not --remotes=origin
 
 #To search a file in all commits:
 git log --all  --remotes --reflog --author-date-order --follow -- sql/Implantacion/SQL_PRE/SQL/07.1.Script_GPT-2994.sql
+
+
+
+#Buscar archivos eliminados
+git log --name-status --diff-filter=D
+
+#Mejor aún es utilizar la opción: full-history
+#--full-history: This flag tells Git not to hide out (or prune) any history associated with the file. In other words, history simplification will not be done.
+git log --name-status --full-history --diff-filter=D
+
+
+#Buscar archivos eliminados
+git log --name-status --full-history --diff-filter=D *Siebel*
+git log --name-status --full-history --diff-filter=D -- *Siebel*
+
+#Quien ha creado un determinado fichero
+git log --diff-filter=A -- "*ContractTypeEvaluatedConditions.java"
+git log --diff-filter=A --name-status -- "*ContractTypeEvaluatedConditions.java"
+#Ficheros renombrados o añadidos que contengan "Reader"
+git log --diff-filter=RA --name-status -- "*Reader*"
+
+git log --graph --decorate --oneline --pretty=format:"[%h: %an]: %s (%ai)"  62bca42edcbc2a9ff45c5dd3e34fdd0b734e5545^..HEAD develop

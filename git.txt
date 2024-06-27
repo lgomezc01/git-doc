@@ -1,7 +1,7 @@
 #Git stores configuration options in three separate files, which lets you scope options to individual repositories (local), user (Global), or the entire system (system):
-#	Local: /.git/config – Repository-specific settings.
-#	Global: /.gitconfig – User-specific settings. This is where options set with the --global flag are stored.
-#	System: $(prefix)/etc/gitconfig – System-wide settings.
+#	Local: /.git/config ï¿½ Repository-specific settings.
+#	Global: /.gitconfig ï¿½ User-specific settings. This is where options set with the --global flag are stored.
+#	System: $(prefix)/etc/gitconfig ï¿½ System-wide settings.
 git config --global --list
 #Configuracion local del projecto
 git config -l
@@ -25,7 +25,7 @@ git status
 git fetch
 git pull origin
 git diff Weblogic/14.1.1.0/Checksum.developer 
-#Si queremos añadir una carpeta
+#Si queremos aï¿½adir una carpeta
 git add git-server/** 
 #git commit -a
 git commit -m "Subismo unos cambios"
@@ -94,7 +94,7 @@ git branch -vv
 #This command will map remote repository at  to a ref in your local repo under . Once you have mapped the remote repo you can push local branches to it.
 	#git push -u <remote_name> <local_branch_name>
 #This command will push the local repo branch under < local_branch_name > to the remote repo at < remote_name >
-#Algo así como asocia la rama local master a la url que tiene asociado el repositorio remoto: origin
+#Algo asï¿½ como asocia la rama local master a la url que tiene asociado el repositorio remoto: origin
 git push -u origin master
 gir log 
 git show-branch --all
@@ -102,6 +102,9 @@ git show-branch --all
 git show-branch --list -r 
 git branch --list --remote 
 git branch --list
+git branch --all
+git branch -al "*master"
+
 
 git show-branch origin/master develop 
 ! [origin/master] delete test.txt
@@ -116,7 +119,7 @@ git show-branch origin/master develop
  * [develop~6] Eliminamos contenido que no se necesita en git
  * [develop~7] Cambios diversos
  * [develop~8^2] Subida de dos contenedores de ejemplo: ssh-server y git-server
- * [develop~9] Añadido fichero de configuarción weblogic con parametros de memoria y arranque
+ * [develop~9] Aï¿½adido fichero de configuarciï¿½n weblogic con parametros de memoria y arranque
  * [develop~10] Movido a directorio especifico para weblogic
  * [develop~11] Initial commit
 +* [origin/master] delete test.txt
@@ -133,7 +136,7 @@ git clone lgomezc@127.0.0.1:/srv/git/git-server.git
 
 ################ CREAR REPO A PARTIR DE CARPETA Y HACER PUSH EN GITHUB ################
 
-#…or create a new repository on the command line
+#ï¿½or create a new repository on the command line
 echo "# web_components" >> README.md
 git init
 git add README.md
@@ -142,7 +145,7 @@ git branch -M main
 git remote add origin https://github.com/lgomezc01/web_components.git
 git push -u origin main
 
-#…or push an existing repository from the command line
+#ï¿½or push an existing repository from the command line
 git remote add origin https://github.com/lgomezc01/web_components.git
 git branch -M main
 git push -u origin main
@@ -253,7 +256,7 @@ git diff A...B
 #This form is to view the changes on the branch containing and up to the second <commit>, starting at a common ancestor of both <commit>. git diff A...B is equivalent to git diff $(git-merge-base A B) B.
 #In other words, this will give a diff of changes in master since it diverged from mybranch (but without new changes since then in mybranch).
 
-#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no estï¿½n en la rama remota: remotes/origin/release/release
 git diff --name-only  remotes/origin/release/release..release/5.39.0.0
 git diff --name-status remotes/origin/release/release..release/5.39.0.0
 git diff --numstat remotes/origin/release/release..release/5.39.0.0
@@ -265,7 +268,7 @@ git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat
 git log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat -p
 git config alias.trace 'log --graph --pretty=format:"[%h: %an]: %s (%ai)" --stat' 
 
-#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no están en la rama remota: remotes/origin/release/release
+#Para ver el path completo de los archvios que cambian en la rama release/5.39.0.0 y que no estï¿½n en la rama remota: remotes/origin/release/release
 git log --name-only  remotes/origin/release/release..release/5.39.0.0
 git log --name-status remotes/origin/release/release..release/5.39.0.0
 git log --numstat remotes/origin/release/release..release/5.39.0.0
@@ -394,10 +397,21 @@ git branch -m <new_name>
 
 At this point, you have renamed the local branch.
 
-If you’ve already pushed the <old_name> branch to the remote repository , perform the next steps to rename the remote branch.
+If youï¿½ve already pushed the <old_name> branch to the remote repository , perform the next steps to rename the remote branch.
 
 3.- Push the <new_name> local branch and reset the upstream branch:
 git push origin -u <new_name>
 
 4.- Delete the <old_name> remote branch:
 git push origin --delete <old_name>
+
+#Cambimos HEAD para que apunte al HEAD de la rama remota: origin/develop
+git reset --hard origin/develop
+
+#Restore de la clase: "SiebelOpportunityHandler.java" tirando de la rama remote: origin/develop. Cambiamos staging and working areas
+ git restore -s origin/develop -SW -- "onboarding-service/src/main/java/com/adquira/onboarding/backend/api/handler/SiebelOpportunityHandler.java"
+
+
+#Para hacer reset a un commit previo 
+git reset --hard 25132b22d1455804aa3abfba3a9461adee1e2268
+ git push -f

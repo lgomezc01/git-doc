@@ -1,5 +1,5 @@
-#No se puede listar la fecha de creación de las ramas. Recordemos que las ramas se crear a parir de la referencia e un commit.
-#Lo que se puede hacer es listar el último commit que se haya realizado sobre una rama:
+#No se puede listar la fecha de creaciï¿½n de las ramas. Recordemos que las ramas se crear a parir de la referencia e un commit.
+#Lo que se puede hacer es listar el ï¿½ltimo commit que se haya realizado sobre una rama:
 
 git for-each-ref --sort=-authordate --format="%(objectname) %(objecttype) %(refname) %(authordate)" | less 
 
@@ -27,7 +27,7 @@ do
 	if [ $branch_date -lt $expire_date ]; then
 		branch_name=$(echo $ref | grep -Po "origin(/.*)+" | cut -d'/' -f2-)
 		echo -e "\nELIMINAR BRANCH: $branch_name. DATE: $(date +%F --date="$last_commit_date"). COMMIT: $commit"
-		#Podrías crear un tag antes de eliminar la rama
+		#Podrï¿½as crear un tag antes de eliminar la rama
 		tag_message=$(echo $branch_name | awk -F "/" '{print $NF}' -)
 		tag_version=$(echo $tag_message | grep -m1 -wPo "\\w+\-?\\d+" | head -1)
 		if [ -z "$tag_version" ]; then
@@ -39,10 +39,10 @@ do
 	fi
 done
 
-#Limpiamos en local las rama remotas que ya no existan. Este comando solo habría que hacerlo si el script se ejecuta en local
-#git fetch origin –-prune --prune-tags (no se si interesa borrar los tags; son solo un puntero)
-#git fetch origin –-prune
-echo "git gc –-prune=now"
+#Limpiamos en local las rama remotas que ya no existan. Este comando solo habrï¿½a que hacerlo si el script se ejecuta en local
+#git fetch origin ï¿½-prune --prune-tags (no se si interesa borrar los tags; son solo un puntero)
+#git fetch origin ï¿½-prune
+echo "git gc ï¿½-prune=now"
 git gc --prune=now
 
 
@@ -65,19 +65,22 @@ do
 
         if [ $branch_date -lt $expire_date ]; then
                 echo -e "\nELIMINAR BRANCH: $branch_name. DATE: $(date +%F --date="$last_commit_date"). COMMIT: $commit"
-                #Podrías crear un tag antes de eliminar la rama
+                #Podrï¿½as crear un tag antes de eliminar la rama
                 tag_message=$(echo $branch_name | awk -F "/" '{print $NF}' -)
                 tag_version=$(echo $tag_message | grep -m1 -wPo "\\w+\-?\\d+" | head -1)
                 if [ -z "$tag_version" ]; then
                         tag_version=$tag_message
                 fi
                 echo "git tag -a $tag_version $commit -m \"$tag_message\""
-                echo "git push origin –-delete $tag_message"
-                #git push origin –-delete $ref
+                echo "git push origin ï¿½-delete $tag_message"
+                #git push origin ï¿½-delete $ref
                 git branch -D $branch_name
         fi
 done
 
-git gc –-prune
+git gc ï¿½-prune
 git count-objects -vH
 git prune
+
+#Para ver que ramas tiene aplicado un determinado commit 
+git branch --all --contains 62bca42edcbc2a9ff45c5dd3e34fdd0b734e5545

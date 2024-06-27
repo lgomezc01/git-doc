@@ -150,7 +150,7 @@ You can include changes to ignored files as well by passing the -a option (or --
 
 ####### Managing multiple stashes #######
 
-You aren't limited to a single stash. You can run git stash several times to create multiple stashes, and then use git stash list to view them. By default, stashes are identified simply as a "WIP" – work in progress – on top of the branch and commit that you created the stash from. After a while it can be difficult to remember what each stash contains:
+You aren't limited to a single stash. You can run git stash several times to create multiple stashes, and then use git stash list to view them. By default, stashes are identified simply as a "WIP" ï¿½ work in progress ï¿½ on top of the branch and commit that you created the stash from. After a while it can be difficult to remember what each stash contains:
 
 git stash list
 	stash@{0}: WIP on main: 5002d47 our new homepage
@@ -184,6 +184,9 @@ git stash show
  index.html | 1 +
  style.css | 3 +++
  2 files changed, 4 insertions(+)
+
+#To also show untracked files
+git stash show -u
 
 Or pass the -p option (or --patch) to view the full diff of a stash:
 
@@ -242,6 +245,7 @@ There is no explicit "abort" command, but hitting CTRL-C(SIGINT) will abort the 
 #Solo guardamos los cambios de un archivo en concreto
 git stash push -p requirements.txt -m "Esto va de puta madre"
 git stash list 
+git stash list --name-status
 git stash show 
 #Para ver las diferencias
 git stash show -p

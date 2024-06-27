@@ -1,0 +1,132 @@
+#https://stackoverflow.com/questions/5578270/fully-backup-a-git-repo
+
+What git provides to backup content
+
+git gc --auto
+  docs: man git-gc
+  Cleans up and compacts a repository.
+
+#https://git-scm.com/book/fa/v2/Git-Tools-Bundling
+git bundle --all
+  docs: man git-bundle, man git-rev-list
+  Atomic = "Hot-Copy"
+  Bundles are dump files and can be directly used with git (verify, clone, etc.).
+  Supports incremental extraction.
+  Verifiable via git bundle verify
+
+git clone --mirror
+  docs: man git-clone, man git-fsck, What's the difference between git clone --mirror and git clone --bare
+  Atomic = "Hot-Copy"
+  Mirrors are real git repositories.
+  Primary intention of this command is to build a full active mirror, that periodically fetches updates from the original repository.
+  Supports hardlinks for mirrors on same file system to avoid wasting space.
+  Verifiable via git fsck.
+  Mirrors can be used as a basis for a full file backup script.
+
+
+git clone --mirror https://lgomezc1@bitbucket.org/adquira/weblogic-domains.git ../weblogic-domains-backup
+git fsck
+
+#Other way to do it: 
+
+cd ../weblogic-domains-backup
+git bundle create weblogic_domain.bundle --all
+file weblogic_domain.bundle
+weblogic_domain.bundle: Git bundle
+git bundle verify weblogic_domain.bundle
+git bundle list-heads weblogic_domain.bundle
+git ls-remote weblogic_domain.bundle
+git clone weblogic_domain.bundle ../old-weblogic-domains
+cd ../old-weblogic-domains
+git remote -v
+  origin  C:/Users/lgomezc/git/weblogic-domains-backup/weblogic_domains.bundle (fetch)
+  origin  C:/Users/lgomezc/git/weblogic-domains-backup/weblogic_domains.bundle (push)
+
+#You can use a tag that is present in both:
+git bundle create mybundle v1.0.0..master
+
+#You can use a basis based on time:
+git bundle create mybundle --since=10.days master
+
+#You can use the number of commits:
+git bundle create mybundle -10 master
+
+######################### BAKCUP MARKETPLACE #########################
+git clone --mirror https://lgomezc1@bitbucket.org/adquira/marketplace.git ../mkp_backup
+cd ../mkp_backup
+git gc --prune
+#Nos esta dando problema al verificar si utilizamos --since
+#git bundle create mkp_develop_last_year.bundle --since=365.days develop
+git bundle create mkp_develop_last_year.bundle --since=365.days HEAD develop
+git bundle list-heads  mkp_develop_last_year.bundle
+git bundle verify mkp_develop_last_year.bundle
+#Nos da error de commit no alcanble: Pero es correcto. Esto significa que hemos exportando parte del arbol de commit y que en destino ha de existir el commit al que se refenreica para que la importación tenga sentenido
+git log --graph --oneline --format='%h %s [%an %ai]' develop
+
+#Se tendría que hacer si hubiera funcionado el bundle con --since
+#git clone mkp_develop_last_year.bundle ../new_mkp
+git clone -b develop mkp_develop_last_year.bundle ../new_mkp
+git clone --shallow-since=365.days mkp_develop_last_year.bundle ../new_mkp
+
+
+
+######################### BAKCUP APPROVAL #########################
+##si que ha funcionado (solo mantenmos develop)
+#If you don’t include HEAD in the references, you have to also specify -b master or whatever branch is included because otherwise it won’t know what branch to check out
+git bundle create approval.bundle HEAD develop
+git bundle verify approval.bundle
+git bundle list-heads approval.bundle
+git clone -b develop approval.bundle ../approval_new
+
+
+#Creamos un respository solo de la rama develop y en el último año. Si evitamos pasar la opción "branch", se usara la rama donde este apuntando HEAD
+git clone --bare --progress -v --branch=develop --shallow-since=365.days https://lgomezc1@bitbucket.org/adquira/approval.git approval.git
+
+#Con esta opción no creamos un server repository. Solo nos bajamos la rama develop en el ultimo año. El resto de ramas nos la pela
+git clone --branch=develop --shallow-since=365.days https://lgomezc1@bitbucket.org/adquira/approval.git 
+
+
+######################### CREAR NUEVO RESOSITORI A PARTIR DE UNO EXISTENTE, ESPECIFICANDO RAMA Y FECHAS #########################
+#IMPORANTE: EL RESPOSITORIO CREADO SOLO TIENE UNA RAMA: UTILIZAR GIT BUNDLE PARA ESPECIFICAR VARIAS RAMAS
+#git clone --bare --progress -v --shallow-since=365.days https://lgomezc1@bitbucket.org/adquira/approval.git approval.git
+git clone --bare --progress -v --branch=develop --shallow-since=365.days https://lgomezc1@bitbucket.org/adquira/approval.git approval.git
+mkdir repositories
+cd repositories/
+git clone ../approval.git/
+cd approval/
+git branch -r 
+#Solo tenemos rama develop y con 365 de commits
+git log
+
+
+######################### CREAR NUEVO RESOSITORI A PARTIR DE UNO EXISTENTE, ESPECIFICANDO VARIAS RAMAS #########################
+#Para hacer el bundle las ramas tienes que estar en local
+git checkout -b master origin/master 
+git checkout -b release/release origin/release/release
+git branch
+git bundle create approval.bundle HEAD develop master release/release
+git bundle verify approval.bundle
+git bundle list-heads approval.bundle
+#Creamos un repositorio server. 
+git clone --bare -b develop approval.bundle ../approval_new 
+#Solo se trae la rama develop (el resto pasa; debe ser por el parametro:  --shallow-since=365.days. Además NO se trae los commit del último año)
+#git clone --bare --shallow-since=365.days -b develop  approval.bundle ../approval_new 
+cd ../approval_new
+#Tiene que litar las 3 ramas: develop master release/release
+git branch
+mkdir ../repositories
+cd ../repositories
+git clone ../approval_new/
+#Estoy dentro de repositories. He clonado sobre el nuevo repositry server con las 3 ramas
+cd approval_new
+#Me lista las 3 ramas
+git branch -r 
+
+
+
+######################### COMENTARIOS SOBRE RESPOSITORIOS EN ADQUIRA #########################
+
+La mayoría de los repositorio (almenos los importantes: mkp y hmg) tiene alguna rama o commit que apunta a la carpeta target que contiene todas las librerias y que ocupan mucho espacio.
+
+Esto provoca que al hacer el clone nos estemos bajando un montón de objetos git innecesarios.
+
