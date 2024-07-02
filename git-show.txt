@@ -1,4 +1,5 @@
 git ls-tree -l HEAD -- C:\Luis\Proyectos\linux\ansible\modules.txt
+git ls-tree -r --full-name  d540fd00db8ace868c8fd7c4ca9b27b677b06500 approval-web/src/main/webapp/temp/readme.txt 
 git ls-files --stage -- "*ansibleCmds.txt" 
 git show --textconv :ansible/ansibleCmds.txt
 git show --textconv HEAD:ansible/modules.txt
