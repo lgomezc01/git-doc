@@ -1,3 +1,4 @@
+#https://www.google.com/search?q=bitbucket+tutrial+git-subtree&oq=bitbucket+tutrial+git-subtree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIKCAEQABiABBiiBDIKCAIQABiABBiiBDIKCAMQABiABBiiBDIKCAQQABiABBiiBDIKCAUQABiABBiiBDIGCAYQRRhA0gEKMTI2NDdqMGoxNagCALACAA&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:1f363c8c,vid:t3Qhon7burE,st:0
 ################ GIT-SUBTREE ################
 
 #Tenemos un repositorio ya existente: "home_repository" (tiene la carpeta .git)
@@ -10,8 +11,8 @@ git fetch docker master
 cd docker_folder
 touch file1.txt
 git add file1.txt
-git commit -m "añadismo file1.txt al subtree docker_folder" 
-#Con esto subimos al repositorio de "docker" pero el contenido también habría que subirlo al repositorio padre: origin
+git commit -m "aï¿½adismo file1.txt al subtree docker_folder" 
+#Con esto subimos al repositorio de "docker" pero el contenido tambiï¿½n habrï¿½a que subirlo al repositorio padre: origin
 git subtree push --prefix=docker_folder docker master
 
 #Para acutaliza cambios de otras personas

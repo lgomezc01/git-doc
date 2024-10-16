@@ -134,6 +134,20 @@ git log --name-status --full-history --diff-filter=D
 git log --name-status --full-history --diff-filter=D *Siebel*
 git log --name-status --full-history --diff-filter=D -- *Siebel*
 
+#Para recuperar un archivo borrado
+#Quiero buscar una clase que se ha borrado y que tiene la palabra: "soap" (hago uso de grep para evitar case sesitive)
+git log --name-status --full-history --diff-filter=D *.java | grep -i soap
+#Voy a buscar el commit del borrado de este archivo (hago uso de name-status para saber en cual de ellos se ha realizado el borrado; en el comando restore usa el commit donde se añadió el fichero): 
+git log --full-history --name-status --  "MarketApp-V8-web/src/main/java/com/adquira/mkp/web/servlets/SOAPServlet.java"
+#Podemos identificar si ha sido renombrado
+git log --name-status --full-history --diff-filter=R "*SOAPServlet.java"
+#Visualizamos el fichero borrado:
+git show 1cbc135ed16d533fec9b28a0db61e465de5d3450 -- "MarketApp-V8-web/src/main/java/com/adquira/mkp/web/servlets/SOAPServlet.java"
+#Ver al flujo de cambios que puede ayudar:
+git log --all --graph  1cbc135ed16d533fec9b28a0db61e465de5d3450
+git restore --source ef922ffedbc47fe4dae5f86988b3d8c097c51759 'MarketApp-V8-web/src/main/java/com/adquira/mkp/web/servlets/SOAPServlet.java'
+git log --full-history --patch-with-stat  -S"SOAPServlet" "**/web.xml"
+
 #Quien ha creado un determinado fichero
 git log --diff-filter=A -- "*ContractTypeEvaluatedConditions.java"
 git log --diff-filter=A --name-status -- "*ContractTypeEvaluatedConditions.java"

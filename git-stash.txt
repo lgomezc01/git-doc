@@ -249,6 +249,8 @@ git stash list --name-status
 git stash show 
 #Para ver las diferencias
 git stash show -p
+#Si solo quiero hacer stash de unos determindos ficheros:
+git stash push -m "Containerfile con deploy.sh" weblogic/containers/Containerfile-ssh
 
 ####### Creating a branch from your stash #######
 
